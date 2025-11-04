@@ -36,6 +36,7 @@ model Filme {
   genero          String
   duracaoMinutos  Int
   avaliacao       Float?
+  imgUrl         String
 
   // Relacionamentos
   salas      RegistroSala[]
