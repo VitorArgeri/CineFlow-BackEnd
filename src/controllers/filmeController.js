@@ -30,10 +30,10 @@ class FilmeController {
     // POST /api/filmes
     async createFilme(req, res) {
         try {
-            const { nome, dataLancamento, genero, duracaoMinutos, avaliacao } = req.body;
-            if (!nome || !dataLancamento || !genero || duracaoMinutos === undefined) {
+            const { nome, dataLancamento, genero, duracaoMinutos, avaliacao, imgUrl, classificacaoIndicativa, sinopse } = req.body;
+            if (!nome || !dataLancamento || !genero || duracaoMinutos || avaliacao || imgUrl || classificacaoIndicativa || sinopse === undefined) {
                 return res.status(400).json({
-                    error: "Os campos 'nome', 'dataLancamento', 'genero' e 'duracaoMinutos' são obrigatórios",
+                    error: "Os campos 'nome', 'dataLancamento', 'genero', 'duracaoMinutos', 'avaliacao', 'imgUrl', 'classificacaoIndicativa' e 'sinopse' são obrigatórios",
                 });
             }
 
@@ -42,7 +42,10 @@ class FilmeController {
                 dataLancamento,
                 genero,
                 Number(duracaoMinutos),
-                avaliacao
+                avaliacao,
+                imgUrl,
+                classificacaoIndicativa,
+                sinopse
             );
 
             if (!novo) {
@@ -60,7 +63,7 @@ class FilmeController {
     async updateFilme(req, res) {
         try {
             const { id } = req.params;
-            const { nome, dataLancamento, genero, duracaoMinutos, avaliacao } = req.body;
+            const { nome, dataLancamento, genero, duracaoMinutos, avaliacao, imgUrl, classificacaoIndicativa, sinopse } = req.body;
 
             const atualizado = await FilmeModel.update(
                 id,
@@ -68,7 +71,10 @@ class FilmeController {
                 dataLancamento,
                 genero,
                 duracaoMinutos,
-                avaliacao
+                avaliacao,
+                imgUrl,
+                classificacaoIndicativa,
+                sinopse
             );
 
             if (!atualizado) {

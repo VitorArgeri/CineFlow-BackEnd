@@ -17,14 +17,14 @@ class FilmeModel {
         return filme;
     }
 
-    async create(nome, dataLancamento, genero, duracaoMinutos, avaliacao) {
+    async create(nome, dataLancamento, genero, duracaoMinutos, avaliacao, imgUrl, classificacaoIndicativa, sinopse) {
         const novo = await prisma.filme.create({
-            data: { nome, dataLancamento, genero, duracaoMinutos, avaliacao },
+            data: { nome, dataLancamento, genero, duracaoMinutos, avaliacao, imgUrl, classificacaoIndicativa, sinopse },
         });
         return novo;
     }
 
-    async update(id, nome, dataLancamento, genero, duracaoMinutos, avaliacao) {
+    async update(id, nome, dataLancamento, genero, duracaoMinutos, avaliacao, imgUrl, classificacaoIndicativa, sinopse) {
         const filme = await this.findById(id);
         if (!filme) return null;
 
@@ -34,6 +34,9 @@ class FilmeModel {
         if (genero !== undefined) data.genero = genero;
         if (duracaoMinutos !== undefined) data.duracaoMinutos = duracaoMinutos;
         if (avaliacao !== undefined) data.avaliacao = avaliacao;
+        if (imgUrl !== undefined) data.imgUrl = imgUrl;
+        if (classificacaoIndicativa !== undefined) data.classificacaoIndicativa = classificacaoIndicativa;
+        if (sinopse !== undefined) data.sinopse = sinopse;
 
         const atualizado = await prisma.filme.update({
             where: { id: Number(id) },

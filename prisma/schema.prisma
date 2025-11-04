@@ -37,6 +37,8 @@ model Filme {
   duracaoMinutos  Int
   avaliacao       Float?
   imgUrl         String
+  classificacaoIndicativa Int
+  sinopse        String
 
   // Relacionamentos
   salas      RegistroSala[]
