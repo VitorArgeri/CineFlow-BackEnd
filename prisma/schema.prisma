@@ -1,0 +1,171 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ===== Modelos do domínio do cinema =====
+
+model Pedido {
+  id         Int           @id @default(autoincrement())
+  precoTotal Decimal        @default(0)
+  status     String         @default("Pendente")
+  qrCode     String         @unique
+
+  registros  RegistroPedido[]
+
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@map("pedidos")
+}
+
+model Filme {
+  id              Int                @id @default(autoincrement())
+  nome            String
+  dataLancamento  DateTime
+  genero          String
+  duracaoMinutos  Int
+  avaliacao       Float?
+
+  // Relacionamentos
+  salas      RegistroSala[]
+  sessoes    Sessao[]
+  pedidos    RegistroPedido[]
+
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  @@map("filmes")
+}
+
+model Sala {
+  id         Int             @id @default(autoincrement())
+  capacidade Int
+
+  // Relacionamentos
+  filmes   RegistroSala[]
+  sessoes  Sessao[]
+  assentos Assento[]
+
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@map("salas")
+}
+
+model Sessao {
+  id        Int       @id @default(autoincrement())
+  tipo      String
+  salaId    Int
+  filmeId   Int
+  dataHora  DateTime
+
+  sala   Sala   @relation(fields: [salaId], references: [id])
+  filme  Filme  @relation(fields: [filmeId], references: [id])
+
+  registros RegistroSessao[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sessoes")
+}
+
+model Assento {
+  id        Int           @id @default(autoincrement())
+  posicao   String
+  salaId    Int
+  status    String        @default("Livre")
+
+  sala      Sala          @relation(fields: [salaId], references: [id])
+  registros RegistroSessao[]
+
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@map("assentos")
+}
+
+model Alimento {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  preco     Decimal
+
+  pedidos   RegistroPedido[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("alimentos")
+}
+
+// Tabelas de Registro (auxiliares)
+model RegistroPedido {
+  id         Int       @id @default(autoincrement())
+  pedidoId   Int
+  filmeId    Int?
+  alimentoId Int?
+
+  pedido   Pedido   @relation(fields: [pedidoId], references: [id])
+  filme    Filme?   @relation(fields: [filmeId], references: [id])
+  alimento Alimento? @relation(fields: [alimentoId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("registroPedidos")
+}
+
+model RegistroSala {
+  id       Int   @id @default(autoincrement())
+  filmeId  Int
+  salaId   Int
+
+  filme  Filme @relation(fields: [filmeId], references: [id])
+  sala   Sala  @relation(fields: [salaId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([filmeId, salaId])
+
+  @@map("registroSalas")
+}
+
+model RegistroSessao {
+  id        Int    @id @default(autoincrement())
+  sessaoId  Int
+  assentoId Int
+
+  sessao  Sessao  @relation(fields: [sessaoId], references: [id])
+  assento Assento @relation(fields: [assentoId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([sessaoId, assentoId])
+
+  @@map("registroSessoes")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
