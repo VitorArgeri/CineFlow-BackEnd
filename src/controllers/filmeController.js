@@ -31,7 +31,8 @@ class FilmeController {
     async createFilme(req, res) {
         try {
             const { nome, dataLancamento, genero, duracaoMinutos, avaliacao, imgUrl, classificacaoIndicativa, sinopse } = req.body;
-            if (!nome || !dataLancamento || !genero || duracaoMinutos || avaliacao || imgUrl || classificacaoIndicativa || sinopse === undefined) {
+            // Validate required fields: all must be present and non-empty
+            if (!nome || !dataLancamento || !genero || !duracaoMinutos || !avaliacao || !imgUrl || !classificacaoIndicativa || !sinopse) {
                 return res.status(400).json({
                     error: "Os campos 'nome', 'dataLancamento', 'genero', 'duracaoMinutos', 'avaliacao', 'imgUrl', 'classificacaoIndicativa' e 'sinopse' são obrigatórios",
                 });
@@ -41,7 +42,7 @@ class FilmeController {
                 nome,
                 dataLancamento,
                 genero,
-                Number(duracaoMinutos),
+                duracaoMinutos,
                 avaliacao,
                 imgUrl,
                 classificacaoIndicativa,
