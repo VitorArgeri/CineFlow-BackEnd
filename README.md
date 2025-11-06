@@ -1,6 +1,5 @@
-# SilksongProject (Back-end)
-Olá, este é o projeto CineFlow
-O Cineflow tem como objetivo oferecer aos amantes de cinema um sistema agradável que possibilite a compra de ingressos e alimentos no cinema.
+# CineFlow (Back-end)
+O Cineflow tem como objetivo oferecer uma solução prática para os clientes que enfrentam longas filas em cinemas. Através de um Totem interativo, o sistema facilitará a compra de ingressos e alimentos, tornando a experiência mais rápida e eficiente.
 
 ## Clonar o projeto
 ```bash
