@@ -17,19 +17,20 @@ class SessaoModel {
         return sessao;
     }
 
-    async create(tipo, salaId, filmeId, dataHora) {
+    async create(tipo, dublagem, salaId, filmeId, dataHora) {
         const nova = await prisma.sessao.create({
-            data: { tipo, salaId, filmeId, dataHora },
+            data: { tipo, dublagem, salaId, filmeId, dataHora },
         });
         return nova;
     }
 
-    async update(id, tipo, salaId, filmeId, dataHora) {
+    async update(id, tipo, dublagem, salaId, filmeId, dataHora) {
         const sessao = await this.findById(id);
         if (!sessao) return null;
 
         const data = {};
         if (tipo !== undefined) data.tipo = tipo;
+        if (dublagem !== undefined) data.dublagem = dublagem;
         if (salaId !== undefined) data.salaId = salaId;
         if (filmeId !== undefined) data.filmeId = filmeId;
         if (dataHora !== undefined) data.dataHora = dataHora;

@@ -30,13 +30,13 @@ class SessaoController {
     // POST /api/sessoes
     async createSessao(req, res) {
         try {
-            const { tipo, salaId, filmeId, dataHora } = req.body;
-            if (!tipo || salaId === undefined || filmeId === undefined || !dataHora) {
+            const { tipo, dublagem, salaId, filmeId, dataHora } = req.body;
+            if (!tipo || !dublagem || salaId === undefined || filmeId === undefined || !dataHora) {
                 return res.status(400).json({
-                    error: "Os campos 'tipo', 'salaId', 'filmeId' e 'dataHora' são obrigatórios",
+                    error: "Os campos 'tipo', 'dublagem', 'salaId', 'filmeId' e 'dataHora' são obrigatórios",
                 });
             }
-            const nova = await SessaoModel.create(tipo, salaId, filmeId, dataHora);
+            const nova = await SessaoModel.create(tipo, dublagem, salaId, filmeId, dataHora);
             if (!nova) {
                 return res.status(400).json({ error: "Erro ao criar sessão" });
             }
@@ -51,8 +51,8 @@ class SessaoController {
     async updateSessao(req, res) {
         try {
             const { id } = req.params;
-            const { tipo, salaId, filmeId, dataHora } = req.body;
-            const atualizada = await SessaoModel.update(id, tipo, salaId, filmeId, dataHora);
+            const { tipo, dublagem, salaId, filmeId, dataHora } = req.body;
+            const atualizada = await SessaoModel.update(id, tipo, dublagem, salaId, filmeId, dataHora);
             if (!atualizada) {
                 return res.status(404).json({ error: "Sessão não encontrada" });
             }
