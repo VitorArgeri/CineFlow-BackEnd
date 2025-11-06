@@ -103,7 +103,7 @@ model Alimento {
   id        Int      @id @default(autoincrement())
   nome      String
   preco     Decimal
-
+  imgUrl    String
   pedidos   RegistroPedido[]
 
   createdAt DateTime @default(now())

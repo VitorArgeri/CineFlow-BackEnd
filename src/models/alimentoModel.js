@@ -17,18 +17,19 @@ class AlimentoModel {
         return alimento;
     }
 
-    async create(nome, preco) {
-        const novo = await prisma.alimento.create({ data: { nome, preco } });
+    async create(nome, preco, imgUrl) {
+        const novo = await prisma.alimento.create({ data: { nome, preco, imgUrl } });
         return novo;
     }
 
-    async update(id, nome, preco) {
+    async update(id, nome, preco, imgUrl) {
         const alimento = await this.findById(id);
         if (!alimento) return null;
 
         const data = {};
         if (nome !== undefined) data.nome = nome;
         if (preco !== undefined) data.preco = preco;
+        if (imgUrl !== undefined) data.imgUrl = imgUrl;
 
         const atualizado = await prisma.alimento.update({
             where: { id: Number(id) },

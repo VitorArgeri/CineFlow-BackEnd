@@ -30,13 +30,13 @@ class AlimentoController {
     // POST /api/alimentos
     async createAlimento(req, res) {
         try {
-            const { nome, preco } = req.body;
-            if (!nome || preco === undefined) {
+            const { nome, preco, imgUrl } = req.body;
+            if (!nome || !preco || !imgUrl === undefined) {
                 return res
                     .status(400)
-                    .json({ error: "Os campos 'nome' e 'preco' são obrigatórios" });
+                    .json({ error: "Os campos 'nome', 'preco' e 'imgUrl' são obrigatórios" });
             }
-            const novo = await AlimentoModel.create(nome, preco);
+            const novo = await AlimentoModel.create(nome, preco, imgUrl);
             if (!novo) {
                 return res.status(400).json({ error: "Erro ao criar alimento" });
             }
@@ -51,8 +51,8 @@ class AlimentoController {
     async updateAlimento(req, res) {
         try {
             const { id } = req.params;
-            const { nome, preco } = req.body;
-            const atualizado = await AlimentoModel.update(id, nome, preco);
+            const { nome, preco, imgUrl } = req.body;
+            const atualizado = await AlimentoModel.update(id, nome, preco, imgUrl);
             if (!atualizado) {
                 return res.status(404).json({ error: "Alimento não encontrado" });
             }
