@@ -4,7 +4,7 @@ class SessaoModel {
     async findAll() {
         const sessoes = await prisma.sessao.findMany({
             orderBy: { createdAt: "desc" },
-            include: { sala: true, filme: true, registros: true },
+            include: { sala: true, filme: true, registros: true, ingressos: true },
         });
         return sessoes;
     }
@@ -12,7 +12,7 @@ class SessaoModel {
     async findById(id) {
         const sessao = await prisma.sessao.findUnique({
             where: { id: Number(id) },
-            include: { sala: true, filme: true, registros: true },
+            include: { sala: true, filme: true, registros: true, ingressos: true },
         });
         return sessao;
     }

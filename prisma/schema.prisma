@@ -16,48 +16,48 @@ datasource db {
 // ===== Modelos do domínio do cinema =====
 
 model Pedido {
-  id         Int           @id @default(autoincrement())
-  precoTotal Decimal        @default(0)
-  status     String         @default("Pendente")
-  qrCode     String         @unique
+  id         Int     @id @default(autoincrement())
+  precoTotal Decimal @default(0)
+  status     String  @default("Pendente")
+  qrCode     String  @unique
 
-  registros  RegistroPedido[]
+  registros RegistroPedido[]
 
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("pedidos")
 }
 
 model Filme {
-  id              Int                @id @default(autoincrement())
-  nome            String
-  dataLancamento  DateTime
-  genero          String
-  duracaoMinutos  Int
-  avaliacao       Float?
-  imgUrl         String
+  id                      Int      @id @default(autoincrement())
+  nome                    String
+  dataLancamento          DateTime
+  genero                  String
+  duracaoMinutos          Int
+  avaliacao               Float?
+  imgUrl                  String
   classificacaoIndicativa String
-  sinopse        String
+  sinopse                 String
 
   // Relacionamentos
-  salas      RegistroSala[]
-  sessoes    Sessao[]
-  pedidos    RegistroPedido[]
+  salas   RegistroSala[]
+  sessoes Sessao[]
+  pedidos RegistroPedido[]
 
-  createdAt  DateTime           @default(now())
-  updatedAt  DateTime           @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("filmes")
 }
 
 model Ingresso {
-  id        Int      @id @default(autoincrement())
-  preco     Int
-  tipo      String
+  id    Int    @id @default(autoincrement())
+  preco Int
+  tipo  String
 
   // Relacionamentos
-  sessoes   Sessao[]
+  sessoes Sessao[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -66,7 +66,7 @@ model Ingresso {
 }
 
 model Sala {
-  id         Int             @id @default(autoincrement())
+  id         Int @id @default(autoincrement())
   capacidade Int
 
   // Relacionamentos
@@ -74,24 +74,24 @@ model Sala {
   sessoes  Sessao[]
   assentos Assento[]
 
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("salas")
 }
 
 model Sessao {
-  id        Int       @id @default(autoincrement())
-  tipo      String
-  dublagem  String
-  ingressoId Int
-  salaId    Int
-  filmeId   Int
-  dataHora  DateTime
+  id         Int      @id @default(autoincrement())
+  tipo       String
+  dublagem   String
+  ingressoId Int?
+  salaId     Int
+  filmeId    Int
+  dataHora   DateTime
 
-  ingresso Ingresso @relation(fields: [ingressoId], references: [id])
-  sala   Sala   @relation(fields: [salaId], references: [id])
-  filme  Filme  @relation(fields: [filmeId], references: [id])
+  ingresso Ingresso? @relation(fields: [ingressoId], references: [id])
+  sala     Sala      @relation(fields: [salaId], references: [id])
+  filme    Filme     @relation(fields: [filmeId], references: [id])
 
   registros RegistroSessao[]
 
@@ -102,27 +102,27 @@ model Sessao {
 }
 
 model Assento {
-  id        Int           @id @default(autoincrement())
-  posicao   String
-  salaId    Int
-  status    String        @default("Livre")
+  id      Int    @id @default(autoincrement())
+  posicao String
+  salaId  Int
+  status  String @default("Livre")
 
-  sala      Sala          @relation(fields: [salaId], references: [id])
+  sala      Sala             @relation(fields: [salaId], references: [id])
   registros RegistroSessao[]
 
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("assentos")
 }
 
 model Alimento {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  preco     Decimal
-  tipo      String
-  imgUrl    String
-  pedidos   RegistroPedido[]
+  id      Int              @id @default(autoincrement())
+  nome    String
+  preco   Decimal
+  tipo    String
+  imgUrl  String
+  pedidos RegistroPedido[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -132,13 +132,13 @@ model Alimento {
 
 // Tabelas de Registro (auxiliares)
 model RegistroPedido {
-  id         Int       @id @default(autoincrement())
+  id         Int  @id @default(autoincrement())
   pedidoId   Int
   filmeId    Int?
   alimentoId Int?
 
-  pedido   Pedido   @relation(fields: [pedidoId], references: [id])
-  filme    Filme?   @relation(fields: [filmeId], references: [id])
+  pedido   Pedido    @relation(fields: [pedidoId], references: [id])
+  filme    Filme?    @relation(fields: [filmeId], references: [id])
   alimento Alimento? @relation(fields: [alimentoId], references: [id])
 
   createdAt DateTime @default(now())
@@ -148,23 +148,22 @@ model RegistroPedido {
 }
 
 model RegistroSala {
-  id       Int   @id @default(autoincrement())
-  filmeId  Int
-  salaId   Int
+  id      Int @id @default(autoincrement())
+  filmeId Int
+  salaId  Int
 
-  filme  Filme @relation(fields: [filmeId], references: [id])
-  sala   Sala  @relation(fields: [salaId], references: [id])
+  filme Filme @relation(fields: [filmeId], references: [id])
+  sala  Sala  @relation(fields: [salaId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([filmeId, salaId])
-
   @@map("registroSalas")
 }
 
 model RegistroSessao {
-  id        Int    @id @default(autoincrement())
+  id        Int @id @default(autoincrement())
   sessaoId  Int
   assentoId Int
 
@@ -175,15 +174,14 @@ model RegistroSessao {
   updatedAt DateTime @updatedAt
 
   @@unique([sessaoId, assentoId])
-
   @@map("registroSessoes")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

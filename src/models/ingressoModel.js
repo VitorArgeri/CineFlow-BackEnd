@@ -18,7 +18,7 @@ class IngressoModel {
     }
 
     async create( preco, tipo ) {
-        const novo = await prisma.ingresso.create({ data: { preco, tipo } });
+        const novo = await prisma.ingresso.create({ data: { preco, tipo }});
         return novo;
     }
 
