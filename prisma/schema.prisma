@@ -13,7 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ===== Modelos do domínio do cinema =====
 
 model Pedido {
   id         Int              @id @default(autoincrement())
