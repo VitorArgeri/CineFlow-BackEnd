@@ -31,7 +31,6 @@ class AssentoModel {
         const data = {};
         if (posicao !== undefined) data.posicao = posicao;
         if (salaId !== undefined) data.salaId = salaId;
-        if (status !== undefined) data.status = status;
 
         const atualizado = await prisma.assento.update({
             where: { id: Number(id) },

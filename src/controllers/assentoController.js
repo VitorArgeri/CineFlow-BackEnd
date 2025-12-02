@@ -30,14 +30,14 @@ class AssentoController {
     // POST /api/assentos
     async createAssento(req, res) {
         try {
-            const { posicao, salaId, status } = req.body;
+            const { posicao, salaId } = req.body;
             if (!posicao || salaId === undefined) {
                 return res.status(400).json({
                     error: "Os campos 'posicao' e 'salaId' são obrigatórios",
                 });
             }
 
-            const novo = await AssentoModel.create(posicao, salaId, status);
+            const novo = await AssentoModel.create(posicao, salaId);
             if (!novo) {
                 return res.status(400).json({ error: "Erro ao criar assento" });
             }
@@ -52,8 +52,8 @@ class AssentoController {
     async updateAssento(req, res) {
         try {
             const { id } = req.params;
-            const { posicao, salaId, status } = req.body;
-            const atualizado = await AssentoModel.update(id, posicao, salaId, status);
+            const { posicao, salaId } = req.body;
+            const atualizado = await AssentoModel.update(id, posicao, salaId);
             if (!atualizado) {
                 return res.status(404).json({ error: "Assento não encontrado" });
             }

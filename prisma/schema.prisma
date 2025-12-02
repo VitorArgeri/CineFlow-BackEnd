@@ -105,7 +105,6 @@ model Assento {
   id      Int    @id @default(autoincrement())
   posicao String
   salaId  Int
-  status  String @default("Livre")
 
   sala      Sala             @relation(fields: [salaId], references: [id])
   registros RegistroSessao[]
