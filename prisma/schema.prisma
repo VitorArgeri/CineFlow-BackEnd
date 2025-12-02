@@ -51,6 +51,20 @@ model Filme {
   @@map("filmes")
 }
 
+model Ingresso {
+  id        Int      @id @default(autoincrement())
+  preco     Int
+  tipo      String
+
+  // Relacionamentos
+  sessoes   Sessao[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ingressos")
+}
+
 model Sala {
   id         Int             @id @default(autoincrement())
   capacidade Int
@@ -70,10 +84,12 @@ model Sessao {
   id        Int       @id @default(autoincrement())
   tipo      String
   dublagem  String
+  ingressoId Int
   salaId    Int
   filmeId   Int
   dataHora  DateTime
 
+  ingresso Ingresso @relation(fields: [ingressoId], references: [id])
   sala   Sala   @relation(fields: [salaId], references: [id])
   filme  Filme  @relation(fields: [filmeId], references: [id])
 
