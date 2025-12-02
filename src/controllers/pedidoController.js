@@ -30,23 +30,20 @@ class PedidoController {
     // POST /api/pedidos
     async createPedido(req, res) {
         try {
-            const { precoTotal, status, qrCode } = req.body;
-
-            if (precoTotal === undefined || !status || !qrCode) {
-                return res.status(400).json({
-                    error: "Os campos 'precoTotal', 'status' e 'qrCode' são obrigatórios",
-                });
-            }
-
-            const novoPedido = await PedidoModel.create(precoTotal, status, qrCode);
-            if (!novoPedido) {
-                return res.status(400).json({ error: "Erro ao criar pedido" });
-            }
+            const { sessaoId, assentosIds, alimentosIds, userId } = req.body;
+            const novoPedido = await PedidoModel.checkout({
+                sessaoId,
+                assentosIds,
+                alimentosIds,
+                userId,
+            });
 
             res.status(201).json(novoPedido);
         } catch (error) {
             console.error("Erro ao criar pedido:", error);
-            res.status(500).json({ error: "Erro ao criar pedido" });
+            const status = error.status ?? 500;
+            const message = error.status ? error.message : "Erro ao criar pedido";
+            res.status(status).json({ error: message });
         }
     }
 
@@ -56,7 +53,7 @@ class PedidoController {
             const { id } = req.params;
             const { precoTotal, status, qrCode } = req.body;
 
-            const atualizado = await PedidoModel.update(id, precoTotal, status, qrCode);
+            const atualizado = await PedidoModel.update(id, { precoTotal, status, qrCode });
             if (!atualizado) {
                 return res.status(404).json({ error: "Pedido não encontrado" });
             }

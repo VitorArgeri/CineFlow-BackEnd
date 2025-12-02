@@ -4,7 +4,7 @@ class RegistroPedidoModel {
     async findAll() {
         const registros = await prisma.registroPedido.findMany({
             orderBy: { createdAt: "desc" },
-            include: { pedido: true, filme: true, alimento: true },
+            include: { pedido: true, alimento: true },
         });
         return registros;
     }
@@ -12,25 +12,24 @@ class RegistroPedidoModel {
     async findById(id) {
         const registro = await prisma.registroPedido.findUnique({
             where: { id: Number(id) },
-            include: { pedido: true, filme: true, alimento: true },
+            include: { pedido: true, alimento: true },
         });
         return registro;
     }
 
-    async create(pedidoId, filmeId, alimentoId) {
+    async create(pedidoId, alimentoId) {
         const novo = await prisma.registroPedido.create({
-            data: { pedidoId, filmeId, alimentoId },
+            data: { pedidoId, alimentoId },
         });
         return novo;
     }
 
-    async update(id, pedidoId, filmeId, alimentoId) {
+    async update(id, pedidoId, alimentoId) {
         const registro = await this.findById(id);
         if (!registro) return null;
 
         const data = {};
         if (pedidoId !== undefined) data.pedidoId = pedidoId;
-        if (filmeId !== undefined) data.filmeId = filmeId;
         if (alimentoId !== undefined) data.alimentoId = alimentoId;
 
         const atualizado = await prisma.registroPedido.update({

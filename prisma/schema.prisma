@@ -16,12 +16,14 @@ datasource db {
 // ===== Modelos do domínio do cinema =====
 
 model Pedido {
-  id         Int     @id @default(autoincrement())
-  precoTotal Decimal @default(0)
-  status     String  @default("Pendente")
-  qrCode     String  @unique
-
-  registros RegistroPedido[]
+  id         Int              @id @default(autoincrement())
+  precoTotal Decimal          @default(0)
+  status     String           @default("Pendente")
+  qrCode     String           @unique
+  userId     Int?
+  user       User?            @relation(fields: [userId], references: [id])
+  ingressos  RegistroSessao[]
+  alimentos  RegistroPedido[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -43,7 +45,6 @@ model Filme {
   // Relacionamentos
   salas   RegistroSala[]
   sessoes Sessao[]
-  pedidos RegistroPedido[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -105,6 +106,7 @@ model Assento {
   id      Int    @id @default(autoincrement())
   posicao String
   salaId  Int
+  status  String @default("Livre")
 
   sala      Sala             @relation(fields: [salaId], references: [id])
   registros RegistroSessao[]
@@ -131,14 +133,12 @@ model Alimento {
 
 // Tabelas de Registro (auxiliares)
 model RegistroPedido {
-  id         Int  @id @default(autoincrement())
+  id         Int @id @default(autoincrement())
   pedidoId   Int
-  filmeId    Int?
-  alimentoId Int?
+  alimentoId Int
 
-  pedido   Pedido    @relation(fields: [pedidoId], references: [id])
-  filme    Filme?    @relation(fields: [filmeId], references: [id])
-  alimento Alimento? @relation(fields: [alimentoId], references: [id])
+  pedido   Pedido   @relation(fields: [pedidoId], references: [id])
+  alimento Alimento @relation(fields: [alimentoId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -165,9 +165,11 @@ model RegistroSessao {
   id        Int @id @default(autoincrement())
   sessaoId  Int
   assentoId Int
+  pedidoId  Int
 
   sessao  Sessao  @relation(fields: [sessaoId], references: [id])
   assento Assento @relation(fields: [assentoId], references: [id])
+  pedido  Pedido  @relation(fields: [pedidoId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -177,10 +179,11 @@ model RegistroSessao {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String
-  email    String @unique
+  email    String   @unique
   password String
+  pedidos  Pedido[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

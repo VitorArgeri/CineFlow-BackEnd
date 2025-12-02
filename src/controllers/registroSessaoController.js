@@ -30,13 +30,13 @@ class RegistroSessaoController {
     // POST /api/registros-sessao
     async createRegistroSessao(req, res) {
         try {
-            const { sessaoId, assentoId } = req.body;
-            if (sessaoId === undefined || assentoId === undefined) {
+            const { sessaoId, assentoId, pedidoId } = req.body;
+            if (sessaoId === undefined || assentoId === undefined || pedidoId === undefined) {
                 return res.status(400).json({
-                    error: "Os campos 'sessaoId' e 'assentoId' são obrigatórios",
+                    error: "Os campos 'sessaoId', 'assentoId' e 'pedidoId' são obrigatórios",
                 });
             }
-            const novo = await RegistroSessaoModel.create(sessaoId, assentoId);
+            const novo = await RegistroSessaoModel.create(sessaoId, assentoId, pedidoId);
             if (!novo) {
                 return res.status(400).json({ error: "Erro ao criar registro de sessão" });
             }
@@ -51,8 +51,8 @@ class RegistroSessaoController {
     async updateRegistroSessao(req, res) {
         try {
             const { id } = req.params;
-            const { sessaoId, assentoId } = req.body;
-            const atualizado = await RegistroSessaoModel.update(id, sessaoId, assentoId);
+            const { sessaoId, assentoId, pedidoId } = req.body;
+            const atualizado = await RegistroSessaoModel.update(id, sessaoId, assentoId, pedidoId);
             if (!atualizado) {
                 return res.status(404).json({ error: "Registro de sessão não encontrado" });
             }

@@ -30,13 +30,13 @@ class RegistroPedidoController {
     // POST /api/registros-pedido
     async createRegistroPedido(req, res) {
         try {
-            const { pedidoId, filmeId, alimentoId } = req.body;
-            if (pedidoId === undefined) {
+            const { pedidoId, alimentoId } = req.body;
+            if (pedidoId === undefined || alimentoId === undefined) {
                 return res.status(400).json({
-                    error: "O campo 'pedidoId' é obrigatório",
+                    error: "Os campos 'pedidoId' e 'alimentoId' são obrigatórios",
                 });
             }
-            const novo = await RegistroPedidoModel.create(pedidoId, filmeId, alimentoId);
+            const novo = await RegistroPedidoModel.create(pedidoId, alimentoId);
             if (!novo) {
                 return res.status(400).json({ error: "Erro ao criar registro de pedido" });
             }
@@ -51,8 +51,8 @@ class RegistroPedidoController {
     async updateRegistroPedido(req, res) {
         try {
             const { id } = req.params;
-            const { pedidoId, filmeId, alimentoId } = req.body;
-            const atualizado = await RegistroPedidoModel.update(id, pedidoId, filmeId, alimentoId);
+            const { pedidoId, alimentoId } = req.body;
+            const atualizado = await RegistroPedidoModel.update(id, pedidoId, alimentoId);
             if (!atualizado) {
                 return res.status(404).json({ error: "Registro de pedido não encontrado" });
             }
