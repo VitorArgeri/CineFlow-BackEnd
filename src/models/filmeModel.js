@@ -4,7 +4,7 @@ class FilmeModel {
     async findAll() {
         const filmes = await prisma.filme.findMany({
             orderBy: { createdAt: "desc" },
-            include: { salas: true, sessoes: true, pedidos: true },
+            include: { salas: true, sessoes: true },
         });
         return filmes;
     }
@@ -12,7 +12,7 @@ class FilmeModel {
     async findById(id) {
         const filme = await prisma.filme.findUnique({
             where: { id: Number(id) },
-            include: { salas: true, sessoes: true, pedidos: true },
+            include: { salas: true, sessoes: true },
         });
         return filme;
     }
